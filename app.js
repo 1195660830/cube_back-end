@@ -5,7 +5,8 @@ server.connection({ port: 3000 });
 const init = async () => { 
 	server.route([ // 创建一个简单的 hello hapi 接口 
 		{ method: 'GET', path: '/', handler: (request, reply) => { 
-			reply('hello hapi power by require hapi!!'); 
+			//reply('hello hapi power by require hapi!!'); 
+			reply('hello hapi every day!'); 
 		}, 
 	}, 
 ]); // 启动服务 
