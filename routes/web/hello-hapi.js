@@ -9,13 +9,13 @@
 module.exports = [
 {
 method: 'GET',
-			path: '/',
+			path: '/web',
 			handler: (request,reply) => {
-				reply('测试hello-hapi');
+				reply('hapi web');
 			},
 			config: {
-				tags: ['api','test'],
-				description: '测试hello-hapi',
+				tags: ['api','web_swagger'], // 配置接口组,如果 config 没有,则 单独显示.
+				description: '测试 web端',
 				},
 
 },

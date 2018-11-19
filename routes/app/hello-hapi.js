@@ -9,13 +9,13 @@
 module.exports = [
 {
 method: 'GET',
-			path: '/',
+			path: '/app',
 			handler: (request,reply) => {
-				reply('测试hello-hapi');
+				reply('hapi app');
 			},
 			config: {
-				tags: ['api','test'],
-				description: '测试hello-hapi',
+				tags: ['api','app_swagger'],
+				description: '测试移动端',
 				},
 
 },

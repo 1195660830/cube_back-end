@@ -1,8 +1,8 @@
-// production evn
-//module.exports = {
-//	host: '127.0.0.1',
-//	port: 3000,
-//}
+/**
+ * @fileoverview 监听接口设置
+ * @author Wade
+ */
+
 const { env }= process;
 
 module.exports = {
