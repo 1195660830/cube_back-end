@@ -3,25 +3,43 @@
  * @author Wade
  */
 
-//配置swagger,还能作为注释使用,简直太方便了
-
 const models = require("../../models");
+
+const {
+	paginationDefine
+} = require('../../utils/router-helper');
+
+const GROUP_NAME = 'web';
 
 module.exports = [{
 	method: 'GET',
-	path: '/web/news',
-	handler: (request, reply) => {
-		// 通过 await 来异步查取数据
-		const result = await models.news.findAll({
+	path: `/${GROUP_NAME}/news`,
+	handler: async (request, reply) => {
+		const {
+			rows: results,
+			count: totalCount
+		} = await models.newsModels.findAndCountAll({
 			attributes: [
-				'id'
-			]
+				'id', 'title', 'content', 'create_user', 'news_url', 'is_top', 'created_at'
+			],
+			limit: request.query.limit,
+			offset: (request.query.page - 1) * request.query.limit,
 		});
-		reply(result)
+		// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+		reply({
+			results,
+			totalCount
+		});
 	},
 	config: {
-		tags: ['api', 'test'],
-		description: '获取首页赛事新闻',
-	},
+		tags: ['api', 'web_swagger'], // 配置接口组,如果 config 没有,则 单独显示.
+		auth: false,
+		description: '获取新闻',
+		validate: {
+			query: {
+				...paginationDefine
+			}
+		}
+	}
 
 }, ]

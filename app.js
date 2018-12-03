@@ -1,9 +1,8 @@
 /**
- * @fileoverview controller
+ * @fileoverview 项目核心文件
  * @author Wade
  */
 
- //配置swagger,还能作为注释使用,简直太方便了
 
 const Hapi = require('hapi'); // 引入 hapi 框架
 
@@ -18,9 +17,10 @@ const routesWeb = require('./routes/web/hello-hapi'); // 引入 网页端 服务
 
 
 const pluginHapiSwagger = require('./plugins/hapi-swagger'); // 引入 swagger 配置
+const pluginHapiPagination = require('./plugins/hapi-pagination'); // 引入 分页 配置
 
 const server = new Hapi.Server(); 
-// 配置服务器启动 host 与端口 
+
 
 server.connection({ 
 	// 配置 监听接口	
@@ -32,12 +32,13 @@ const init = async () => {
 await server.register([
 	// 使用 hapi-swagger
 	...pluginHapiSwagger,
+	pluginHapiPagination,
 	]);
 server.route([
 	// 业务 接口
-	...routesHelloHapi,
-	...routesAdmin,
-	...routesApp,
+	// ...routesHelloHapi,
+	// ...routesAdmin,
+	// ...routesApp,
 	...routesWeb
 ]); 
 

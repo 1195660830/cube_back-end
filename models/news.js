@@ -1,37 +1,42 @@
+/**
+ * @fileoverview model 新闻
+ * @author Wade
+ */
+
 module.exports = (sequelize, DataTypes) => sequelize.define(
-    'news',
+    'newsModels',
     {
-        id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-          },
-          title: {
-            type: Sequelize.STRING,
-            allowNull: false,
-          },
-          content: {
-            type: Sequelize.STRING,
-            allowNull: false,
-          },
-          create_user: {
-            type: Sequelize.STRING,
-            allowNull: false,
-          },
-          img: {
-            type: Sequelize.STRING,
-            allowNull: false,
-          },
-          news_url: Sequelize.STRING,
-          is_top: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-          },
-          version: Sequelize.INTEGER,
-          status: Sequelize.INTEGER,
-          created_at: Sequelize.DATE,
-          updated_at: Sequelize.DATE,
-          remark: Sequelize.STRING,
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      content: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      create_user: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      img: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      news_url: DataTypes.STRING,
+      is_top: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      version: DataTypes.INTEGER,
+      status: DataTypes.INTEGER,
+      created_at: DataTypes.DATE,
+      updated_at: DataTypes.DATE,
+      remark: DataTypes.STRING,
     },
     {
       tableName: 'news',

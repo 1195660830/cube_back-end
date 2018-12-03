@@ -1,36 +1,36 @@
 module.exports = (sequelize, DataTypes) => sequelize.define(
     'hot_video', {
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         title: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
         },
 
         content: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         is_top: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         create_user: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         'video_url': {
-            type: Sequelize.STRING
+            type: DataTypes.STRING
         },
 
-        version: Sequelize.INTEGER,
-        status: Sequelize.INTEGER,
-        created_at: Sequelize.DATE,
-        updated_at: Sequelize.DATE,
-        remark: Sequelize.STRING,
+        version: DataTypes.INTEGER,
+        status: DataTypes.INTEGER,
+        created_at: DataTypes.DATE,
+        updated_at: DataTypes.DATE,
+        remark: DataTypes.STRING,
     }, {
         tableName: 'hot_video',
     },
