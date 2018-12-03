@@ -43,7 +43,8 @@ server.route([
 
 await server.start(); 
 console.log('15180601021 韦凯迪 毕业设计 魔方赛事平台 power by hapi');
-console.log(`Server running at: ${server.info.uri};`);
+console.log(`Server running at: ${server.info.uri}`);
+console.log(`SWagger Server running at: ${server.info.uri}/documentation`);
 };
 
 init();
