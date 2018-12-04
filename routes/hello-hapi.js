@@ -7,22 +7,27 @@
 const { jwtHeaderDefine } = require('../utils/router-helper');
 
 module.exports = [
-{
-method: 'GET',
-			path: '/',
-			handler: (request,reply) => {
-				reply('测试hello-hapi');
-			},
-			config: {
-				tags: ['api','test'],
-				auth:false,
-				description: '已使用 jwt,需要首先使用签发机构的接口获取 token,才能使用,但是在 上一行 auth 设置为 false , 即可随意进入',
-				validate: {
-					...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
-				  },
-				},
-				
+  {
+    method: 'GET',
+    path: '/',
+    handler: (request, reply) => {
+      /*
+      plugins/hapi-auth-jwt2.js 中的 credentials 定义
 
-},
-]
+      const credentials = {
+        userId,
+      };
+      */
+      console.log(request.auth.credentials); // 控制台输出 { userId: 1}
+      reply('hello hapi');
+    },
+    config: {
+      tags: ['api', 'tests'],
+      description: '测试hello-hapi',
+      validate: {
+        ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
+      },
+    },
+  },
+];
 

@@ -5,6 +5,7 @@
 
 
 const Hapi = require('hapi'); // 引入 hapi 框架
+const hapiAuthJWT2 = require('hapi-auth-jwt2');
 
 require('env2')('./.env'); // 引入私密目标服务器配置
 
@@ -20,6 +21,8 @@ const routesUser = require('./routes/user'); // 引入 网页端 服务接口
 const pluginHapiSwagger = require('./plugins/hapi-swagger'); // 引入 swagger 配置
 const pluginHapiPagination = require('./plugins/hapi-pagination'); // 引入 分页 配置
 
+const pluginHapiAuthJWT2 = require('./plugins/hapi-auth-jwt2'); // 引入 jwt 配置
+
 const server = new Hapi.Server(); 
 
 
@@ -34,7 +37,11 @@ await server.register([
 	// 使用 hapi-swagger
 	...pluginHapiSwagger,
 	pluginHapiPagination,
+	hapiAuthJWT2, // 先注册
 	]);
+
+pluginHapiAuthJWT2(server); // 加密操作 jwt  顺序不可颠倒
+
 server.route([
 	// 业务 接口
 	...routesHelloHapi,

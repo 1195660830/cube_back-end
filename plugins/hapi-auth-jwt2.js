@@ -15,10 +15,10 @@ const validate = (decoded, request, callback) => {
       userId: jwtInfo.userId,
       exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60,
     };
-    return JWT.sign(payload, process.env.JWT_SECRET);
+    return JWT.sign(payload, config.jwtSecret);
   */
 
-  // decoded 为 JWT payload 被解码后的数据
+  // decoded 为 JWT payload 被解码后的数据
   const { userId } = decoded;
 
   if (!userId) {
@@ -33,7 +33,6 @@ const validate = (decoded, request, callback) => {
 
 module.exports = (server) => {
   server.auth.strategy('jwt', 'jwt', {
-    // 需要自行在 config/index.js 中添加 jwtSecret 的配置，并且通过 process.env.JWT_SECRET 来进行 .git 版本库外的管理。
     key: config.jwtSecret,
     validateFunc: validate,
   });
