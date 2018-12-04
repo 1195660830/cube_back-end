@@ -33,7 +33,7 @@ module.exports = [{
 	},
 	config: {
 		tags: ['api', 'web_swagger'], // 配置接口组,如果 config 没有,则 单独显示.
-		auth: false,
+		// auth: false,
 		description: '获取新闻',
 		validate: {
 			query: {

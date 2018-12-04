@@ -14,6 +14,7 @@ const routesHelloHapi = require('./routes/hello-hapi'); // 引入测试 服务�
 const routesAdmin = require('./routes/admin/hello-hapi'); // 引入 后台管理 服务接口
 const routesApp = require('./routes/app/hello-hapi'); // 引入 移动端 服务接口
 const routesWeb = require('./routes/web/hello-hapi'); // 引入 网页端 服务接口
+const routesUser = require('./routes/user'); // 引入 网页端 服务接口
 
 
 const pluginHapiSwagger = require('./plugins/hapi-swagger'); // 引入 swagger 配置
@@ -36,10 +37,11 @@ await server.register([
 	]);
 server.route([
 	// 业务 接口
-	// ...routesHelloHapi,
+	...routesHelloHapi,
 	// ...routesAdmin,
 	// ...routesApp,
-	...routesWeb
+	...routesWeb,
+	...routesUser
 ]); 
 
 await server.start(); 
