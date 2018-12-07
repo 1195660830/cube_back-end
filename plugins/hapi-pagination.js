@@ -74,6 +74,7 @@ const options = {
       // 使用以上字段进行提示的 路径白名单
     include: [  
       '/web/news',
+      '/app/news',
     ],
     exclude: [],
   },

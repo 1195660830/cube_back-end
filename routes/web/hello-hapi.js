@@ -5,9 +5,7 @@
 
 const models = require("../../models");
 
-const {
-	paginationDefine
-} = require('../../utils/router-helper');
+const { paginationDefine } = require('../../utils/router-helper');
 
 const GROUP_NAME = 'web';
 
