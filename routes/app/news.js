@@ -60,11 +60,6 @@ module.exports = [
 		handler: async (request, reply) => {
 			models.sequelize.transaction(function (t) {
 				// 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
-
-				//FIXME 时间戳 莫名其妙被转换成 toString() 而不是 toLocalString()
-
-				// request.payload.newsRequest.created_at = new Date().toString()
-				// request.payload.newsRequest.updated_at = '2018-12-7 20:44:42'
 				request.payload.newsRequest.status = 1 
 				console.log(request.payload.newsRequest.created_at,request.payload.newsRequest.updated_at,request.payload.newsRequest.status)
 				return models.newsModels
@@ -113,9 +108,6 @@ module.exports = [
 							news_url: Joi.string(),
 							is_top: Joi.number().integer(),
 							version: Joi.number().integer(),
-							// status: Joi.number().integer(),
-							// created_at: new Date().toLocaleString(),
-							// updated_at: new Date().toLocaleString(),
 							remark: Joi.string()
 						}),
 					
