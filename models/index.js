@@ -8,7 +8,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = {
   ...configs[env],
   define: {
-    underscored: true,
+    underscored: true, //尝试 去除,与 设 false ,都会报 找不到 createdAt, true 适配 数据库 created_at
   },
 };
 const db = {};
@@ -33,8 +33,8 @@ fs
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+        db[modelName].associate(db);
+      }
 });
 
 db.sequelize = sequelize;

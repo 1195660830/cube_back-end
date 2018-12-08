@@ -63,8 +63,8 @@ module.exports = [
 
 				//FIXME 时间戳 莫名其妙被转换成 toString() 而不是 toLocalString()
 
-				request.payload.newsRequest.created_at = '2018-12-7 20:44:40'
-				request.payload.newsRequest.updated_at = '2018-12-7 20:44:42'
+				// request.payload.newsRequest.created_at = new Date().toString()
+				// request.payload.newsRequest.updated_at = '2018-12-7 20:44:42'
 				request.payload.newsRequest.status = 1 
 				console.log(request.payload.newsRequest.created_at,request.payload.newsRequest.updated_at,request.payload.newsRequest.status)
 				return models.newsModels
