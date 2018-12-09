@@ -30,12 +30,12 @@ module.exports = (sequelize, DataTypes) => sequelize.define(
       news_url: DataTypes.STRING,
       is_top: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        // allowNull: true,
       },
       version: DataTypes.INTEGER,
       status: DataTypes.INTEGER,
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE,
+      // created_at: DataTypes.DATE,
+      // updated_at: DataTypes.DATE,
       remark: DataTypes.STRING,
     },
     {

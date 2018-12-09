@@ -14,8 +14,7 @@ const Op = Sequelize.Op;
 
 const GROUP_NAME = "app";
 
-module.exports = [
-	{
+module.exports = [{
 		method: "Get",
 		path: `/${GROUP_NAME}/news`,
 		handler: async (request, reply) => {
@@ -60,16 +59,14 @@ module.exports = [
 		handler: async (request, reply) => {
 			models.sequelize.transaction(function (t) {
 				// 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
-				request.payload.newsRequest.status = 1 
-				console.log(request.payload.newsRequest.created_at,request.payload.newsRequest.updated_at,request.payload.newsRequest.status)
+				request.payload.newsRequest.status = 1
+				request.payload.newsRequest.version = 1
 				return models.newsModels
 					.findOrCreate({
 						where: {
-							'title':request.payload.newsRequest.title
+							'title': request.payload.newsRequest.title
 						},
-						defaults: 
-							request.payload.newsRequest
-						,
+						defaults: request.payload.newsRequest,
 						transaction: t
 					})
 					.spread((user, created) => {
@@ -99,19 +96,18 @@ module.exports = [
 			description: "添加新闻,标题重复则添加失败",
 			validate: {
 				payload: {
-					newsRequest:Joi.object().keys({
-							id: Joi.number().integer(),
-							title: Joi.string(),
-							content: Joi.string(),
-							create_user: Joi.string(),
-							img: Joi.string(),
-							news_url: Joi.string(),
-							is_top: Joi.number().integer(),
-							version: Joi.number().integer(),
-							remark: Joi.string()
-						}),
-					
-				},
+					newsRequest: Joi.object().keys({
+						title: Joi.string(),
+						content: Joi.string(),
+						create_user: Joi.string(),
+						img: Joi.string(),
+						news_url: Joi.string(),
+						is_top: Joi.number().integer(),
+						version: Joi.number().integer(),
+						remark: Joi.string()
+					}),
+
+				}
 			}
 		}
 	},
@@ -158,7 +154,7 @@ module.exports = [
 		config: {
 			tags: ["api", GROUP_NAME],
 			auth: false,
-			description: "模糊查询",
+			description: "模糊查询,新闻标题,新闻内容,只要包含关键字,都能搜索出来",
 			validate: {
 				params: {
 					search: Joi.string()
@@ -216,31 +212,47 @@ module.exports = [
 		method: "PUT",
 		path: `/${GROUP_NAME}/news/{id}`,
 		handler: async (request, reply) => {
-			const targetId = request.params.id;
-			const result = await models.newsModels.update({
-				status: 2
-			}, {
-				where: [{
-						id: targetId
-					},
-					{
-						status: 1
+
+			// 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
+
+			const targetVersion = request.query.version
+			const targetId = request.params.id
+
+			request.payload.newsRequest.version = ++ request.query.version
+
+			models.newsModels.findOne({
+					where: {
+						[Op.and]: [{
+								id: targetId
+							},
+							{
+								version: targetVersion
+							},{
+								status: 1
+							}
+						]
 					}
-				]
-			});
-			if (result[0]) {
-				//result = 1
-				reply({
-					code: 200,
-					result: result
-				});
-			} else {
-				//result = 0
-				reply({
-					code: 210,
-					result: "id错误"
-				});
-			}
+				})
+				.then(project => {
+					if (project) {
+						project.update({
+								...request.payload.newsRequest
+							})
+							.then(
+							function () {
+								reply({
+									code: 200,
+									result: 'success'
+								})
+							}
+							)
+					}else{
+						reply({
+							code: 210,
+							result: 'id错误或版本号错误'
+						})
+					}
+				})
 		},
 		config: {
 			tags: ["api", GROUP_NAME],
@@ -249,6 +261,21 @@ module.exports = [
 			validate: {
 				params: {
 					id: Joi.string().required().description('删除的id'),
+				},
+				query: {
+					version: Joi.string().required().description('删除的version')
+				},
+				payload: {
+					newsRequest: Joi.object().keys({
+						title: Joi.string(),
+						content: Joi.string(),
+						create_user: Joi.string(),
+						img: Joi.string(),
+						news_url: Joi.string(),
+						is_top: Joi.number().integer(),
+						remark: Joi.string()
+					}),
+
 				}
 			}
 		}
