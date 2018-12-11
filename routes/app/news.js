@@ -4,19 +4,19 @@
  */
 
 const Joi = require("joi");
-const {
-	paginationDefine
-} = require("../../utils/router-helper");
+const { paginationDefine } = require("../../utils/router-helper");
+const { jwtHeaderDefine } = require('../../utils/router-helper');
 const models = require("../../models");
 
 const Sequelize = require("Sequelize");
 const Op = Sequelize.Op;
 
-const GROUP_NAME = "app";
+const GROUP_NAME = "app/news";
 
-module.exports = [{
+module.exports = [
+	{
 		method: "Get",
-		path: `/${GROUP_NAME}/news`,
+		path: `/${GROUP_NAME}`,
 		handler: async (request, reply) => {
 			const {
 				rows: results,
@@ -29,7 +29,8 @@ module.exports = [{
 					"create_user",
 					"news_url",
 					"is_top",
-					"created_at"
+					"created_at",
+					"version"
 				],
 				where: {
 					status: 1
@@ -43,7 +44,7 @@ module.exports = [{
 			});
 		},
 		config: {
-			tags: ["api", GROUP_NAME],
+			tags: ["api", GROUP_NAME,],
 			auth: false,
 			description: "查询新闻",
 			validate: {
@@ -55,7 +56,7 @@ module.exports = [{
 	},
 	{
 		method: "POST",
-		path: `/${GROUP_NAME}/news`,
+		path: `/${GROUP_NAME}`,
 		handler: async (request, reply) => {
 			models.sequelize.transaction(function (t) {
 				// 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
@@ -113,7 +114,7 @@ module.exports = [{
 	},
 	{
 		method: "GET",
-		path: `/${GROUP_NAME}/news/{search}`,
+		path: `/${GROUP_NAME}/{search}`,
 		handler: async (request, reply) => {
 			const targetSearch = request.params.search;
 			const {
@@ -127,9 +128,11 @@ module.exports = [{
 					"create_user",
 					"news_url",
 					"is_top",
-					"created_at"
+					"created_at",
+					"version"
 				],
 				where: {
+					'status':1,
 					[Op.or]: [{
 							title: {
 								[Op.like]: "%" + targetSearch + "%"
@@ -169,7 +172,7 @@ module.exports = [{
 	},
 	{
 		method: "DELETE",
-		path: `/${GROUP_NAME}/news/{id}`,
+		path: `/${GROUP_NAME}/{id}`,
 		handler: async (request, reply) => {
 			const targetId = request.params.id;
 			const result = await models.newsModels.update({
@@ -204,13 +207,14 @@ module.exports = [{
 			validate: {
 				params: {
 					id: Joi.string().required().description('删除的id'),
-				}
+				},
+				...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
 			}
 		}
 	},
 	{
 		method: "PUT",
-		path: `/${GROUP_NAME}/news/{id}`,
+		path: `/${GROUP_NAME}/{id}`,
 		handler: async (request, reply) => {
 
 			// 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
