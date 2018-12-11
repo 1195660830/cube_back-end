@@ -24,6 +24,7 @@ module.exports = [
     config: {
       tags: ['api', 'tests'],
       description: '测试hello-hapi',
+      auth:'jwt',
       validate: {
         ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
       },

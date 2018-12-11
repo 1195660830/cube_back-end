@@ -1,17 +1,26 @@
 /**
- * @fileoverview 测试swagger
+ * @fileoverview 移动端 新闻相关接口 添加 删除 修改 查询 搜索 功能
  * @author Wade
  */
+
+
+//------------------------------------------------------------------------------
+// Requirements
+//------------------------------------------------------------------------------
 
 const Joi = require("joi");
 const { paginationDefine } = require("../../utils/router-helper");
 const { jwtHeaderDefine } = require('../../utils/router-helper');
 const models = require("../../models");
-
 const Sequelize = require("Sequelize");
-const Op = Sequelize.Op;
 
+//------------------------------------------------------------------------------
+// Constants
+//------------------------------------------------------------------------------
+
+const Op = Sequelize.Op;
 const GROUP_NAME = "app/news";
+
 
 module.exports = [
 	{

@@ -9,13 +9,15 @@ module.exports = [{
   handler: async (request, reply) => {
     const generateJWT = (jwtInfo) => {
       const payload = {
+        // 设计原则,由于时效性,所以 保存一小部分的不变信息即可.
         userId: jwtInfo.userId,
-        exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60,
+        exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60,//过期时间
       };
       return JWT.sign(payload, config.jwtSecret);
     };
     reply(generateJWT({
       userId: 1,
+      permission:1
     }));
   },
   config: {
