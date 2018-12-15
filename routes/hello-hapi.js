@@ -6,6 +6,9 @@
 
 const { jwtHeaderDefine } = require('../utils/router-helper');
 
+var crypto = require('crypto');
+
+
 module.exports = [
   {
     method: 'GET',
@@ -18,6 +21,16 @@ module.exports = [
         userId,
       };
       */
+      const password = 'weikaidi'
+
+     var md5 = crypto.createHash('md5');
+     
+     var result = md5.update(password).digest('hex');
+     
+     // 输出：0cc175b9c0f1b6a831c399e269772661
+     console.log(result);
+
+
       console.log(request.auth.credentials); // 控制台输出 { userId: 1}
       reply('hello hapi');
     },

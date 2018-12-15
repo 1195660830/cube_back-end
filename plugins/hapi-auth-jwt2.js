@@ -25,21 +25,15 @@ const config = require('../config');
 const validate = (decoded, request, callback) => {
   let error;
   
-  const { userId,permission } = decoded;
+  const { userId } = decoded;
 
   if (!userId) {
     // id 为空
     return callback(error, false, userId);
   }
 
-  if (!permission) {
-    // 权限 为空
-    return callback(error, false, permission);
-  }
-
   const credentials = {
-    userId,
-    permission
+    userId
   };
   
   // 在路由接口的 handler 通过 request.auth.credentials 获取 jwt decoded 的值
