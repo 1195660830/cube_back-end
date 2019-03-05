@@ -57,3 +57,18 @@
 2. cp .env.example .env //由于使用了 ENV2 ,且私密环境不作为信息上传公开的代码管理,需要以.env.example为模板,单独配置一个 .env 文件
 3. 设置正确路径，端口
 4. node app.js // supervisor app.js
+
+#### sequelize 使用方式
+
+### 介绍,sequelize,是连接数据库的工具,类似java的JDBC
+
+sequelize migrate 是用于管理 数据库 建表 添加字段使用的,在建表的同时,需要类似git的操作,每一步都会记录下来,并且还需写下回退操作.
+
+相关操作
+D:\cube_web>node_modules\.bin\sequelize migration:create --name competiton-tablen-add_col // 初始化一个操作 注意填写内容有区别,目前分为 建表和添加列 两种
+D:\cube_web>node_modules\.bin\sequelize db:migrate // 运行操作
+
+sequelize seed 是用于给空表添加一些测试数据的工具,同样有记录功能,但是已有数据的表,再次添加就会报错
+D:\cube_web>node_modules\.bin\sequelize init:seeders --name init-competition // 添加一个操作
+D:\cube_web>node_modules\.bin\sequelize db:seed:all // 一次性直接添加所有操作,但是注意遇到非空表,会报错
+D:\cube_web>node_modules\.bin\sequelize db:seed --seed 20190305142853-init-competition //执行指定操作

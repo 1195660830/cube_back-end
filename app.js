@@ -12,7 +12,7 @@ require('env2')('./.env'); // 引入私密目标服务器配置
 const config = require('./config'); // 监听接口配置
 
 const routesHelloHapi = require('./routes/hello-hapi'); // 引入测试 服务接口
-const routesAdmin = require('./routes/admin/hello-hapi'); // 引入 后台管理 服务接口
+const routesAdmin = require('./routes/admin/admin_hapi'); // 引入 后台管理 服务接口
 const routesApp = require('./routes/app/news'); // 引入 移动端 服务接口
 const routesWeb = require('./routes/web/hello-hapi'); // 引入 网页端 服务接口
 const routesUser = require('./routes/user'); // 引入 网页端 服务接口
@@ -46,7 +46,7 @@ pluginHapiAuthJWT2(server); // 加密操作 jwt  顺序不可颠倒
 server.route([
 	// 业务 接口
 	...routesHelloHapi,
-	// ...routesAdmin,
+	...routesAdmin,
 	...routesApp,
 	...routesWeb,
 	...routesUser

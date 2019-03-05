@@ -1,5 +1,10 @@
+/**
+ * @fileoverview 热点视频
+ * @author Wade
+ */
+
 module.exports = (sequelize, DataTypes) => sequelize.define(
-    'hot_video', {
+    'hotVideoModel', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
