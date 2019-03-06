@@ -70,7 +70,7 @@ D:\cube_web>node_modules\.bin\sequelize db:migrate // 运行操作
 D:\cube_web>node_modules\.bin\sequelize db:migrate:undo // 回退操作
 
 sequelize seed 是用于给空表添加一些测试数据的工具,同样有记录功能,但是已有数据的表,再次添加就会报错
-D:\cube_web>node_modules\.bin\sequelize init:seeders --name init-competition // 添加一个操作
+D:\cube_web>node_modules\.bin\sequelize seed:create --name init-competition // 添加一个操作
 D:\cube_web>node_modules\.bin\sequelize db:seed:all // 一次性直接添加所有操作,但是注意遇到非空表,会报错
 D:\cube_web>node_modules\.bin\sequelize db:seed --seed 20190305142853-init-competition //执行指定操作
 D:\cube_web>node_modules\.bin\sequelize db:seed:undo --seed 20190305142853-init-competition //执行指定操作
