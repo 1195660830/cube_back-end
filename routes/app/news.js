@@ -19,13 +19,13 @@ const Sequelize = require("Sequelize");
 //------------------------------------------------------------------------------
 
 const Op = Sequelize.Op;
-const GROUP_NAME = "app/news";
+const GROUP_NAME = "app";
 
 
 module.exports = [
 	{
 		method: "Get",
-		path: `/${GROUP_NAME}`,
+		path: `/${GROUP_NAME}/news`,
 		handler: async (request, reply) => {
 			const {
 				rows: results,
@@ -65,7 +65,7 @@ module.exports = [
 	},
 	{
 		method: "POST",
-		path: `/${GROUP_NAME}`,
+		path: `/${GROUP_NAME}/news`,
 		handler: async (request, reply) => {
 			models.sequelize.transaction(function (t) {
 				// 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
@@ -123,7 +123,7 @@ module.exports = [
 	},
 	{
 		method: "GET",
-		path: `/${GROUP_NAME}/{search}`,
+		path: `/${GROUP_NAME}/news/{search}`,
 		handler: async (request, reply) => {
 			const targetSearch = request.params.search;
 			const {
@@ -181,7 +181,7 @@ module.exports = [
 	},
 	{
 		method: "DELETE",
-		path: `/${GROUP_NAME}/{id}`,
+		path: `/${GROUP_NAME}/news/{id}`,
 		handler: async (request, reply) => {
 			const targetId = request.params.id;
 			const result = await models.newsModels.update({
@@ -223,7 +223,7 @@ module.exports = [
 	},
 	{
 		method: "PUT",
-		path: `/${GROUP_NAME}/{id}`,
+		path: `/${GROUP_NAME}/news/{id}`,
 		handler: async (request, reply) => {
 
 			// 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
@@ -292,5 +292,164 @@ module.exports = [
 				}
 			}
 		}
-	}
+	},
+	// 其余接口开发
+	{
+		method: 'GET',
+		path: `/${GROUP_NAME}/filter`,
+		handler: async (request, reply) => {
+			const {
+				rows: results,
+				count: totalCount
+			} = await  models.competitionModel.findAndCountAll({
+				attributes: [
+					'id',
+					'location',
+					'country',
+					'name',
+					'event_province',
+					'event_date',
+					'version',
+				],
+				limit: request.query.limit,
+				offset: (request.query.page - 1) * request.query.limit,
+			});
+			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+			reply({
+				results,
+				totalCount
+			});
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'app'],
+			description: '赛事',
+			validate: {
+				query: {
+					...paginationDefine
+				}
+			}
+		},
+
+	},
+	{
+		method: 'GET',
+		path: `/${GROUP_NAME}/hotVideo`,
+		handler: async (request, reply) => {
+			const {
+				rows: results,
+				count: totalCount
+			} = await  models.hotVideoModel.findAndCountAll({
+				attributes: [
+					"id",
+					"title",
+					"video_url",
+					"content",
+					"created_at",
+					"is_top",
+					"version",
+					"status",
+					"updated_at",
+					"remark"
+				],
+				limit: request.query.limit,
+				offset: (request.query.page - 1) * request.query.limit,
+			});
+			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+			reply({
+				results,
+				totalCount
+			});
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'app'],
+			description: '最新视频',
+			validate: {
+				query: {
+					...paginationDefine
+				}
+			}
+		},
+
+	},
+	{
+		method: 'GET',
+		path: `/${GROUP_NAME}/applyUser`,
+		handler: async (request, reply) => {
+			const {
+				rows: results,
+				count: totalCount
+			} = await  models.applyUserModel.findAndCountAll({
+				attributes: [
+					"id",
+					"username",
+					"sex",
+					"apply_types",
+					"apply_time",
+					"is_pay",
+					"pay_way",
+				],
+				limit: request.query.limit,
+				offset: (request.query.page - 1) * request.query.limit,
+			});
+			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+			reply({
+				results,
+				totalCount
+			});
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'app'],
+			description: '报名参赛选手',
+			validate: {
+				query: {
+					...paginationDefine
+				}
+			}
+		},
+
+	},
+	{
+		method: 'GET',
+		path: `/${GROUP_NAME}/competitionResult`,
+		handler: async (request, reply) => {
+			const {
+				rows: results,
+				count: totalCount
+			} = await  models.competitionResultModel.findAndCountAll({
+				attributes: [
+					"id",
+					"username",
+					"sex",
+					"country",
+					"competitionType",
+					"single",
+					"score",
+					"award",
+					"version",
+					"created_at"
+				],
+				limit: request.query.limit,
+				offset: (request.query.page - 1) * request.query.limit,
+			});
+			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+			reply({
+				results,
+				totalCount
+			});
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'app'],
+			description: '比赛成绩',
+			validate: {
+				query: {
+					...paginationDefine
+				}
+			}
+		},
+
+	},
 ];

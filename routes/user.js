@@ -1,7 +1,7 @@
 const JWT = require('jsonwebtoken');
 const config = require('../config');
 
-const GROUP_NAME = 'users';
+const GROUP_NAME = 'tests';
 
 module.exports = [{
   method: 'POST',
@@ -22,7 +22,7 @@ module.exports = [{
   },
   config: {
     tags: ['api', GROUP_NAME],
-    description: '用于测试的用户 JWT 签发',
+    description: 'JWT 秘钥 签发',
     auth: false, // 约定此接口不参与 JWT 的用户验证，会结合下面的 hapi-auth-jwt 来使用
   },
 }];

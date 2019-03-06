@@ -19,19 +19,6 @@ const GROUP_NAME = 'admin'; // 宏定义
 module.exports = [
 	{
 		method: 'GET',
-		path: `/${GROUP_NAME}`,
-		handler: async (request, reply) => {
-			reply("Hello,Itn is admin back_end!")
-		},
-		config: {
-			auth: false,
-			tags: ['api', 'admin_swagger'],
-			description: 'admin 测试',
-		},
-
-	},
-	{
-		method: 'GET',
 		path: `/${GROUP_NAME}/news`,
 		handler: async (request, reply) => {
 			const {
@@ -143,23 +130,61 @@ module.exports = [
 	},
 	{
 		method: 'GET',
+		path: `/${GROUP_NAME}/applyUser`,
+		handler: async (request, reply) => {
+			const {
+				rows: results,
+				count: totalCount
+			} = await  models.applyUserModel.findAndCountAll({
+				attributes: [
+					"id",
+					"username",
+					"sex",
+					"apply_types",
+					"apply_time",
+					"is_pay",
+					"pay_way",
+				],
+				limit: request.query.limit,
+				offset: (request.query.page - 1) * request.query.limit,
+			});
+			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+			reply({
+				results,
+				totalCount
+			});
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'admin_swagger'],
+			description: '报名参赛选手',
+			validate: {
+				query: {
+					...paginationDefine
+				}
+			}
+		},
+
+	},
+	{
+		method: 'GET',
 		path: `/${GROUP_NAME}/competitionResult`,
 		handler: async (request, reply) => {
 			const {
 				rows: results,
 				count: totalCount
-			} = await  models.hotVideoModel.findAndCountAll({
+			} = await  models.competitionResultModel.findAndCountAll({
 				attributes: [
 					"id",
-					"title",
-					"video_url",
-					"content",
-					"created_at",
-					"is_top",
+					"username",
+					"sex",
+					"country",
+					"competitionType",
+					"single",
+					"score",
+					"award",
 					"version",
-					"status",
-					"updated_at",
-					"remark"
+					"created_at"
 				],
 				limit: request.query.limit,
 				offset: (request.query.page - 1) * request.query.limit,

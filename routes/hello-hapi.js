@@ -11,7 +11,7 @@ var crypto = require('crypto');
 
 module.exports = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/',
     handler: (request, reply) => {
       /*
@@ -32,16 +32,29 @@ module.exports = [
 
 
       console.log(request.auth.credentials); // 控制台输出 { userId: 1}
-      reply('hello hapi');
+      reply('秘钥有效');
     },
     config: {
       tags: ['api', 'tests'],
-      description: '测试hello-hapi',
+      description: '测试 jwt 秘钥',
       auth:'jwt',
       validate: {
         ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
       },
     },
   },
+  {
+		method: 'GET',
+		path: '/',
+		handler: async (request, reply) => {
+			reply("Hello,It is cube_web back_end!")
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'tests'],
+			description: '联通 测试',
+		},
+
+	},
 ];
 
