@@ -70,7 +70,7 @@ module.exports = {
     // 删除 shop 表 id 为 1，2，3，4 的记录
     return queryInterface.bulkDelete('hot_video', {
       id: {
-        [Op.in]: [1,2,3,4]
+        [Op.in]: [3,4,5,7]
       }
     }, {});
   },

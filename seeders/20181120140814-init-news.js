@@ -73,7 +73,7 @@ module.exports = {
     // 删除 shop 表 id 为 1，2，3，4 的记录
     return queryInterface.bulkDelete('news', {
       id: {
-        [Op.in]: [1, 2, 3, 4]
+        [Op.in]: [7,4,6,3]
       }
     }, {});
   },

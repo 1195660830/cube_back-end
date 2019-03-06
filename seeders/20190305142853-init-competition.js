@@ -80,9 +80,9 @@ module.exports = {
       Op
     } = Sequelize;
     // 删除 shop 表 id 为 1，2，3，4 的记录
-    return queryInterface.bulkDelete('hot_video', {
+    return queryInterface.bulkDelete('competition', {
       id: {
-        [Op.in]: [1,2,3,4]
+        [Op.in]: [20,23,24,25,26,27]
       }
     }, {});
   },

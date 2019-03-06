@@ -141,77 +141,46 @@ module.exports = [
 		},
 
 	},
-	// {
-	// 	method: 'POST',
-	// 	path: `/${GROUP_NAME}/reg`,
-	// 	handler: (request, reply) => {
-	// 		reply('hapi admin reg');
-	// 	},
-	// 	config: {
-	// 		tags: ['api', 'admin_swagger'],
-	// 		description: '注册',
-	// 	},
+	{
+		method: 'GET',
+		path: `/${GROUP_NAME}/competitionResult`,
+		handler: async (request, reply) => {
+			const {
+				rows: results,
+				count: totalCount
+			} = await  models.hotVideoModel.findAndCountAll({
+				attributes: [
+					"id",
+					"title",
+					"video_url",
+					"content",
+					"created_at",
+					"is_top",
+					"version",
+					"status",
+					"updated_at",
+					"remark"
+				],
+				limit: request.query.limit,
+				offset: (request.query.page - 1) * request.query.limit,
+			});
+			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+			reply({
+				results,
+				totalCount
+			});
+		},
+		config: {
+			auth: false,
+			tags: ['api', 'admin_swagger'],
+			description: '比赛成绩',
+			validate: {
+				query: {
+					...paginationDefine
+				}
+			}
+		},
 
-	// },
-	// {
-	// 	method: 'POST',
-	// 	path: `/${GROUP_NAME}/log`,
-	// 	handler: (request, reply) => {
-	// 		reply('hapi admin log');
-	// 	},
-	// 	config: {
-	// 		tags: ['api', 'admin_swagger'],
-	// 		description: '登录',
-	// 	},
-
-	// },
-	// {
-	// 	method: 'GET',
-	// 	path: `/${GROUP_NAME}/news`,
-	// 	handler: (request, reply) => {
-	// 		reply('hapi admin 新闻');
-	// 	},
-	// 	config: {
-	// 		tags: ['api', 'admin_swagger'],
-	// 		description: '新闻',
-	// 	},
-
-	// },
-	// {
-	// 	method: 'GET',
-	// 	path: `/${GROUP_NAME}/hotVideo`,
-	// 	handler: (request, reply) => {
-	// 		reply('hapi admin 热门视频');
-	// 	},
-	// 	config: {
-	// 		tags: ['api', 'admin_swagger'],
-	// 		description: '热门视频',
-	// 	},
-
-	// },
-	// {
-	// 	method: 'GET',
-	// 	path: `/${GROUP_NAME}/recentEvent`,
-	// 	handler: (request, reply) => {
-	// 		reply('hapi admin 最近赛事');
-	// 	},
-	// 	config: {
-	// 		tags: ['api', 'admin_swagger'],
-	// 		description: '最近赛事',
-	// 	},
-
-	// },
-	// {
-	// 	method: 'GET',
-	// 	path: `/${GROUP_NAME}/user`,
-	// 	handler: (request, reply) => {
-	// 		reply('hapi admin 用户');
-	// 	},
-	// 	config: {
-	// 		tags: ['api', 'admin_swagger'],
-	// 		description: '用户',
-	// 	},
-
-	// },
-
+	},
+	
 ]

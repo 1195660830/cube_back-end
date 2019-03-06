@@ -67,8 +67,11 @@ sequelize migrate 是用于管理 数据库 建表 添加字段使用的,在建�
 相关操作
 D:\cube_web>node_modules\.bin\sequelize migration:create --name competiton-tablen-add_col // 初始化一个操作 注意填写内容有区别,目前分为 建表和添加列 两种
 D:\cube_web>node_modules\.bin\sequelize db:migrate // 运行操作
+D:\cube_web>node_modules\.bin\sequelize db:migrate:undo // 回退操作
 
 sequelize seed 是用于给空表添加一些测试数据的工具,同样有记录功能,但是已有数据的表,再次添加就会报错
 D:\cube_web>node_modules\.bin\sequelize init:seeders --name init-competition // 添加一个操作
 D:\cube_web>node_modules\.bin\sequelize db:seed:all // 一次性直接添加所有操作,但是注意遇到非空表,会报错
 D:\cube_web>node_modules\.bin\sequelize db:seed --seed 20190305142853-init-competition //执行指定操作
+D:\cube_web>node_modules\.bin\sequelize db:seed:undo --seed 20190305142853-init-competition //执行指定操作
+D:\cube_web>node_modules\.bin\sequelize db:seed:undo:all // 一次性回退所有操作 所以建议添加与回退,相对应,就可以做到安全撤离数据
