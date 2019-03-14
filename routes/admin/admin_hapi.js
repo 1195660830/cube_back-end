@@ -11,7 +11,7 @@ const Joi = require("joi"); //分页
 const { paginationDefine } = require("../../utils/router-helper"); //默认分页
 const { jwtHeaderDefine } = require('../../utils/router-helper'); //身份验证
 const models = require("../../models"); // 引入实体对象
-const Sequelize = require("Sequelize"); // 持久类数据库工具
+const Sequelize = require("sequelize"); // 持久类数据库工具
 
 
 const GROUP_NAME = 'admin'; // 宏定义
