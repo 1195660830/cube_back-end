@@ -16,6 +16,7 @@ const routesAdmin = require('./routes/admin/admin_hapi'); // 引入 后台管理
 const routesApp = require('./routes/app/app_weap'); // 引入 移动端 服务接口
 // const routesWeb = require('./routes/web/hello-hapi'); // 引入 网页端 服务接口
 const routesUser = require('./routes/test_Jwt'); // 引入 网页端 服务接口
+const routesWXLoginUser = require('./routes/users'); // 引入 微信 登录 接口
 
 
 const pluginHapiSwagger = require('./plugins/hapi-swagger'); // 引入 swagger 配置
@@ -30,7 +31,7 @@ server.connection({
 	// 配置 监听接口	
 	host: config.host,
 	port: config.port,
-	routes: { cors: true } //跨域
+	// routes: { cors: true } //跨域
 	}); 
 
 const init = async () => { 
@@ -49,7 +50,8 @@ server.route([
 	...routesAdmin,
 	...routesApp,
 	// ...routesWeb,
-	...routesUser
+	...routesUser,
+	...routesWXLoginUser
 ]); 
 
 await server.start(); 
