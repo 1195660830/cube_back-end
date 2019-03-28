@@ -31,7 +31,7 @@ server.connection({
 	// 配置 监听接口	
 	host: config.host,
 	port: config.port,
-	// routes: { cors: true } //跨域
+	routes: { cors: true } //跨域
 	}); 
 
 const init = async () => { 

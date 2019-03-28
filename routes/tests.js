@@ -21,7 +21,7 @@ module.exports = [
         userId,
       };
       */
-      const password = 'weikaidi'
+     const password = 'weikaidi'
 
      var md5 = crypto.createHash('md5');
      
@@ -37,6 +37,23 @@ module.exports = [
     config: {
       tags: ['api', 'tests'],
       description: '测试 jwt 秘钥',
+      auth:'jwt',
+      validate: {
+        ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
+      },
+    },
+  },
+  {
+    method: 'POST',
+    path: '/weapp/getUserInfo',
+    handler: (request, reply) => {
+     console.log(request.auth.credentials); // 控制台输出 { userId: 1}
+      reply('秘钥有效'+request.auth.credentials.userId);
+      // reply(request.auth.credentials);
+    },
+    config: {
+      tags: ['api', 'tests'],
+      description: '根据token获取用户信息',
       auth:'jwt',
       validate: {
         ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验

@@ -62,6 +62,10 @@
 3. 设置正确路径，端口
 4. node app.js // supervisor app.js
 
+#### 注意
+1.后端的跨域设置
+2.后台管理,使用远程服务器,需要设置代理
+
 #### sequelize 使用方式
 
 ### 介绍,sequelize,是连接数据库的工具,类似java的JDBC
