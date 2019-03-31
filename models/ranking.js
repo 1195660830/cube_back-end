@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => sequelize.define(
       best_competition:{ // 最好赛事
         type: DataTypes.STRING,
       },
+      remark: {
+        type: DataTypes.STRING,
+      },
       version: {
         type: DataTypes.STRING,
         allowNull: false,

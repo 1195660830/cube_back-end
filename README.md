@@ -83,3 +83,7 @@ D:\cube_web>node_modules\.bin\sequelize db:seed:all // 一次性直接添加所�
 D:\cube_web>node_modules\.bin\sequelize db:seed --seed 20190305142853-init-competition //执行指定操作
 D:\cube_web>node_modules\.bin\sequelize db:seed:undo --seed 20190305142853-init-competition //执行指定操作
 D:\cube_web>node_modules\.bin\sequelize db:seed:undo:all // 一次性回退所有操作 所以建议添加与回退,相对应,就可以做到安全撤离数据
+
+
+#### 待解决的问题
+1. 新闻添加接口,刚添加完,立即查询,结果没更新,再次请求才能获取到新的信息,如何解决这里的异步问题,还是数据库有缓存,没来得及更新? 已解决,是前端的问题,报错,导致下一步没有执行.
