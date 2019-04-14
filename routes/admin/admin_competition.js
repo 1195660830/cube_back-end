@@ -32,10 +32,12 @@ module.exports = [
 					"id",
 					"username",
 					"sex",
+					"competition_id",
 					"apply_types",
 					"apply_time",
 					"is_pay",
 					"pay_way",
+					"created_at"
 				],
 				where:[
 					{
@@ -68,7 +70,7 @@ module.exports = [
 	},
 	{
 		method: 'GET',
-		path: `/${GROUP_NAME}/${GROUP_NAME1}/`,
+		path: `/${GROUP_NAME}/${GROUP_NAME1}`,
 		handler: async (request, reply) => {
 			const {
 				rows: results,
@@ -76,13 +78,18 @@ module.exports = [
 			} = await  models.competitionModel.findAndCountAll({
 				attributes: [
 					'id',
+					'logo',
 					'location',
 					'country',
 					'name',
 					'event_province',
 					'event_date',
 					'version',
+					'created_at'
 				],
+				where: {
+					'status': 1
+				},
 				limit: request.query.limit,
 				offset: (request.query.page - 1) * request.query.limit,
 			});
@@ -103,6 +110,164 @@ module.exports = [
 			}
 		},
 
+	},
+	{
+		method: "POST",
+		path: `/${GROUP_NAME}/${GROUP_NAME1}`,
+		handler: async (request, reply) => {
+			models.sequelize.transaction(function (t) {
+				// 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
+				request.payload.status = 1
+				request.payload.version = 1
+				return models.competitionModel
+					.findOrCreate({
+						where: {
+							'name': request.payload.title
+						},
+						defaults: request.payload,
+						transaction: t
+					})
+					.spread((user, created) => {
+						console.log(
+							user.get({
+								plain: true
+							})
+						);
+						if (created) {
+
+							reply({
+								code: 200,
+								request: ["succeed"]
+							});
+						} else {
+							reply({
+								code: 210,
+								request: ["已存在名称相同的比赛"]
+							});
+						}
+					});
+			});
+		},
+		config: {
+			tags: ["api", `${GROUP_NAME}_${GROUP_NAME1}`],
+			auth: false,
+			description: "添加赛事,赛事名称重复则添加失败",
+			validate: {
+				payload: {
+						location: Joi.string(),
+						country: Joi.string(),
+						name: Joi.string(),
+						event_province: Joi.string(),
+						event_date: Joi.string(),
+						logo: Joi.string()
+				}
+			}
+		}
+	},
+	{
+		method: "DELETE",
+		path: `/${GROUP_NAME}/${GROUP_NAME1}/{id}`,
+		handler: async (request, reply) => {
+			const targetId = request.params.id;// 路径 获取 id
+			const result = await models.competitionModel.update({
+				status: 2
+			}, {
+				where: [{
+						id: targetId
+					},
+					{
+						status: 1
+					}
+				]
+			});
+			if (result[0]) {
+				//result = 1
+				reply({
+					code: 200,
+					result: result
+				});
+			} else {
+				//result = 0
+				reply({
+					code: 210,
+					result: "id错误"
+				});
+			}
+		},
+		config: {
+			tags: ["api", `${GROUP_NAME}_${GROUP_NAME1}`],
+			auth: false,
+			description: "删除",
+			validate: {
+				params: {
+					id: Joi.string().required().description('删除的id'),
+				},
+			}
+		}
+	},
+	{
+		method: "PUT",
+		path: `/${GROUP_NAME}/${GROUP_NAME1}`,
+		handler: async (request, reply) => {
+			// 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
+			models.sequelize.transaction(function (t) {
+				const { version, id } = request.payload
+				return models.competitionModel.findOne({
+					where: {
+						[Op.and]: [{
+								id: id
+							},
+							{
+								version: version
+							},
+							{
+								status: 1
+							}
+						]
+					}
+				})
+				.then(project => {
+					if (project) {
+						request.payload.version = ++ request.payload.version
+						project.update({
+								...request.payload
+							})
+							.then(
+							function () {
+								reply({
+									code: 200,
+									result: 'success'
+								})
+							}
+							)
+					}else{
+						reply({
+							code: 210,
+							result: 'id错误或版本号错误'
+						})
+					}
+				})
+			});
+		},
+		config: {
+			tags: ["api", `${GROUP_NAME}_${GROUP_NAME1}`],
+			auth: false,
+			description: "修改",
+			validate: {
+				payload: {
+					id: Joi.number().required().description('删除的id'),
+					version: Joi.number().required().description('删除的version'),
+					location: Joi.string(),
+					country: Joi.string(),
+					name: Joi.string(),
+					event_province: Joi.string(),
+					event_date: Joi.string(),
+					logo: Joi.string()
+					
+
+				}
+			}
+		}
 	},
 	// {
 	// 	method: 'GET',
