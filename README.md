@@ -93,4 +93,4 @@ D:\cube_web>node_modules\.bin\sequelize db:seed:undo:all // 一次性回退所�
 1. npm i -g supervisor
 2. npm i hapi@16
 
-#### 从gitee换环境到 githubs
+#### 2019/0414 s从gitee换环境到 githubs
