@@ -94,3 +94,5 @@ D:\cube_web>node_modules\.bin\sequelize db:seed:undo:all // 一次性回退所�
 2. npm i hapi@16
 
 #### 2019/0414 s从gitee换环境到 githubs
+#### 遇到 supervisor 内存泄漏的问题
+解决方式 sudo supervisor -w routes/admin/admin_competition.js app.js  ## 通过监视一个文件，达到减少内存的目的。 -w watch

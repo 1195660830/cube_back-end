@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => sequelize.define(
         autoIncrement: true,
         primaryKey: true,
       },
+      competitionId: {
+        type: DataTypes.STRING,
+        allowNull:false,
+      },
       username: { // 
         type: DataTypes.STRING,
         allowNull: false,

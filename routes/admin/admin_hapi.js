@@ -306,44 +306,6 @@ module.exports = [
 	},
 	{
 		method: 'GET',
-		path: `/${GROUP_NAME}/applyUser`,
-		handler: async (request, reply) => {
-			const {
-				rows: results,
-				count: totalCount
-			} = await  models.applyUserModel.findAndCountAll({
-				attributes: [
-					"id",
-					"username",
-					"sex",
-					"apply_types",
-					"apply_time",
-					"is_pay",
-					"pay_way",
-				],
-				limit: request.query.limit,
-				offset: (request.query.page - 1) * request.query.limit,
-			});
-			// 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
-			reply({
-				results,
-				totalCount
-			});
-		},
-		config: {
-			auth: false,
-			tags: ['api', 'admin_swagger'],
-			description: '报名参赛选手',
-			validate: {
-				query: {
-					...paginationDefine
-				}
-			}
-		},
-
-	},
-	{
-		method: 'GET',
 		path: `/${GROUP_NAME}/ranking`,
 		handler: async (request, reply) => {
 			const {

@@ -296,7 +296,7 @@ module.exports = [
 	// 其余接口开发
 	{
 		method: 'GET',
-		path: `/${GROUP_NAME}/filter`,
+		path: `/${GROUP_NAME}/competitions`,
 		handler: async (request, reply) => {
 			const {
 				rows: results,

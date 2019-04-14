@@ -13,6 +13,7 @@ const config = require('./config'); // 监听接口配置
 
 const routesHelloHapi = require('./routes/tests'); // 引入测试 服务接口
 const routesAdmin = require('./routes/admin/admin_hapi'); // 引入 后台管理 服务接口
+const routesAdminCompetition = require('./routes/admin/admin_competition'); // 引入 后台管理 比赛接口
 const routesApp = require('./routes/app/app_weap'); // 引入 移动端 服务接口
 // const routesWeb = require('./routes/web/hello-hapi'); // 引入 网页端 服务接口
 const routesUser = require('./routes/test_Jwt'); // 引入 网页端 服务接口
@@ -48,6 +49,7 @@ server.route([
 	// 业务 接口
 	...routesHelloHapi,
 	...routesAdmin,
+	...routesAdminCompetition,
 	...routesApp,
 	// ...routesWeb,
 	...routesUser,
