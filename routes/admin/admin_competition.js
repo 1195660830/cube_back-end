@@ -37,7 +37,8 @@ module.exports = [
 					"apply_time",
 					"is_pay",
 					"pay_way",
-					"created_at"
+					"created_at",
+					"version"
 				],
 				where:[
 					{
@@ -59,7 +60,7 @@ module.exports = [
 			description: '根据比赛id获取参赛选手',
 			validate: {
 				params:{
-					competitionId:Joi.string().required().description('删除的id'),
+					competitionId:Joi.string().required().description('比赛的id'),
 				},
 				query: {
 					...paginationDefine
@@ -67,6 +68,171 @@ module.exports = [
 			}
 		},
 
+	},
+	{
+		method: "POST",
+		path: `/${GROUP_NAME}/${GROUP_NAME1}/applyUser`,
+		handler: async (request, reply) => {
+			models.sequelize.transaction(function (t) {
+				// 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
+				request.payload.status = 1
+				request.payload.version = 1
+				return models.applyUserModel
+					.findOrCreate({
+						where: {
+							'username': request.payload.username,
+							'competition_id': request.payload.competition_id,
+						},
+						defaults: request.payload,
+						transaction: t
+					})
+					.spread((user, created) => {
+						console.log(
+							user.get({
+								plain: true
+							})
+						);
+						if (created) {
+
+							reply({
+								code: 200,
+								request: ["succeed"]
+							});
+						} else {
+							reply({
+								code: 210,
+								request: ["同一个比赛，已存在该名称的选手，请重新检查。"]
+							});
+						}
+					});
+			});
+		},
+		config: {
+			tags: ["api", `${GROUP_NAME}_${GROUP_NAME1}`],
+			auth: false,
+			description: "添加报名选手,选手姓名重复则添加失败",
+			validate: {
+				payload: {
+						competition_id: Joi.string(),
+						username: Joi.string(),
+						sex: Joi.string(),
+						apply_types: Joi.string(),
+						apply_time: Joi.string(),
+						is_pay: Joi.string(),
+						pay_way: Joi.string(),
+						status: Joi.string(),
+						logo: Joi.string(),
+				}
+			}
+		}
+	},
+	{
+		method: "PUT",
+		path: `/${GROUP_NAME}/${GROUP_NAME1}/applyUser`,
+		handler: async (request, reply) => {
+			// 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
+			models.sequelize.transaction(function (t) {
+				const { version, id } = request.payload
+				return models.applyUserModel.findOne({
+					where: {
+						[Op.and]: [{
+								id: id
+							},
+							{
+								version: version
+							},
+							{
+								status: 1
+							}
+						]
+					}
+				})
+				.then(project => {
+					if (project) {
+						request.payload.version = ++ request.payload.version
+						project.update({
+								...request.payload
+							})
+							.then(
+							function () {
+								reply({
+									code: 200,
+									result: 'success'
+								})
+							}
+							)
+					}else{
+						reply({
+							code: 210,
+							result: 'id错误或版本号错误'
+						})
+					}
+				})
+			});
+		},
+		config: {
+			tags: ["api", `${GROUP_NAME}_${GROUP_NAME1}`],
+			auth: false,
+			description: "修改",
+			validate: {
+				payload: {
+						id: Joi.number().required().description('删除的id'),
+						version: Joi.number().required().description('删除的version'),
+						competition_id: Joi.string(),
+						username: Joi.string(),
+						sex: Joi.string(),
+						apply_types: Joi.string(),
+						apply_time: Joi.string(),
+						is_pay: Joi.string(),
+						pay_way: Joi.string(),
+						status: Joi.string(),
+						logo: Joi.string(),
+					
+
+				}
+			}
+		}
+	},
+	{
+		method: "DELETE",
+		path: `/${GROUP_NAME}/${GROUP_NAME1}/applyUser/{id}`,
+		handler: async (request, reply) => {
+			const targetId = request.params.id;// 路径 获取 id
+			const result = await models.applyUserModel.update({
+				status: 2
+			}, {
+				where: [{
+						id: targetId
+					},
+					{
+						status: 1
+					}
+				]
+			});
+			if (result[0]) {
+				//result = 1
+				reply({
+					code: 200,
+					result: result
+				});
+			} else {
+				//result = 0
+				reply({
+					code: 210,
+					result: "id错误"
+				});
+			}
+		},
+		config: {
+			tags: ["api", `${GROUP_NAME}_${GROUP_NAME1}`],
+			auth: false,
+			description: "删除",
+			validate: {
+				params: {
+					id: Joi.string().required().description('删除的id'),
+				},
+			}
+		}
 	},
 	{
 		method: 'GET',
