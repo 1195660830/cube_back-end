@@ -2,7 +2,7 @@
  * @Author: wade 
  * @Date: 2019-05-17 14:57:25 
  * @Last Modified by: wade
- * @Last Modified time: 2019-05-17 23:55:35
+ * @Last Modified time: 2019-05-18 00:26:36
  * 
  * 开发文件上传功能
  */
@@ -21,15 +21,17 @@ module.exports = [{
             //     if (err) {
             //         throw err;
             //     }
-            console.log(request.payload.file)
-            const { filename } = request.payload.file.hapi // 获取上传文件
+            // const { filename } = request.payload.file.hapi // 获取上传文件
+            let filename = Math.random().toString(36).substr(2) + '.' + request.payload.file.hapi.filename.split('.').pop()
+                // console.log(request.payload.file.hapi.filename.split('.').pop())
+            console.log(filename)
                 // writeSync 同步版本
             fs.writeFile(__dirname + `/publice/${filename}`, request.payload.file._data, 'utf8', function(error) {
                     if (error) {
                         console.log(error);
                         return false;
                     }
-                    reply(`上传成功`);
+                    reply(`${filename}`);
                 })
                 // })
         },
