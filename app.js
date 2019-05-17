@@ -2,7 +2,7 @@
  * @Author: wade 
  * @Date: 2019-05-17 14:59:12 
  * @Last Modified by: wade
- * @Last Modified time: 2019-05-17 15:52:01
+ * @Last Modified time: 2019-05-17 23:56:23
  * 
  * hapi 启动文件
  */
@@ -42,7 +42,6 @@ server.connection({
 
 const init = async() => {
     await server.register([
-        // 使用 hapi-swagger
         ...pluginHapiSwagger,
         pluginHapiPagination,
         hapiAuthJWT2, // 先注册
