@@ -1,6 +1,10 @@
-/**
- * @fileoverview 项目核心文件
- * @author Wade
+/*
+ * @Author: wade 
+ * @Date: 2019-05-17 14:59:12 
+ * @Last Modified by: wade
+ * @Last Modified time: 2019-05-17 15:52:01
+ * 
+ * hapi 启动文件
  */
 
 
@@ -18,6 +22,7 @@ const routesApp = require('./routes/app/app_weap'); // 引入 移动端 服务�
 // const routesWeb = require('./routes/web/hello-hapi'); // 引入 网页端 服务接口
 const routesUser = require('./routes/test_Jwt'); // 引入 网页端 服务接口
 const routesWXLoginUser = require('./routes/users'); // 引入 微信 登录 接口
+const routesSupport = require('./routes/support'); // 引入 微信 登录 接口
 
 
 const pluginHapiSwagger = require('./plugins/hapi-swagger'); // 引入 swagger 配置
@@ -25,42 +30,42 @@ const pluginHapiPagination = require('./plugins/hapi-pagination'); // 引入 分
 
 const pluginHapiAuthJWT2 = require('./plugins/hapi-auth-jwt2'); // 引入 jwt 配置
 
-const server = new Hapi.Server(); 
+const server = new Hapi.Server();
 
 
-server.connection({ 
-	// 配置 监听接口	
-	host: config.host,
-	port: config.port,
-	routes: { cors: true } //跨域
-	}); 
+server.connection({
+    // 配置 监听接口	
+    host: config.host,
+    port: config.port,
+    routes: { cors: true } //跨域
+})
 
-const init = async () => { 
-await server.register([
-	// 使用 hapi-swagger
-	...pluginHapiSwagger,
-	pluginHapiPagination,
-	hapiAuthJWT2, // 先注册
-	]);
+const init = async() => {
+    await server.register([
+        // 使用 hapi-swagger
+        ...pluginHapiSwagger,
+        pluginHapiPagination,
+        hapiAuthJWT2, // 先注册
+    ])
 
-pluginHapiAuthJWT2(server); // 加密操作 jwt  顺序不可颠倒
+    pluginHapiAuthJWT2(server) // 加密操作 jwt  顺序不可颠倒
 
-server.route([
-	// 业务 接口
-	...routesHelloHapi,
-	...routesAdmin,
-	...routesAdminCompetition,
-	...routesApp,
-	// ...routesWeb,
-	...routesUser,
-	...routesWXLoginUser
-]); 
+    server.route([
+        // 业务 接口
+        ...routesHelloHapi,
+        ...routesAdmin,
+        ...routesAdminCompetition,
+        ...routesApp,
+        ...routesSupport,
+        // ...routesWeb,
+        ...routesUser,
+        ...routesWXLoginUser
+    ])
 
-await server.start(); 
-console.log('15180601021 韦凯迪 毕业设计 魔方赛事平台 power by hapi');
-console.log(`Server running at: ${server.info.uri}`);
-console.log(`SWagger Server running at: ${server.info.uri}/documentation`);
-};
+    await server.start();
+    console.log('15180601021 韦凯迪 毕业设计 魔方赛事平台 power by hapi');
+    console.log(`Server running at: ${server.info.uri}`);
+    console.log(`SWagger Server running at: ${server.info.uri}/documentation`);
+}
 
 init();
-
