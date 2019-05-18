@@ -2,7 +2,7 @@
  * @Author: wade 
  * @Date: 2019-05-17 14:57:25 
  * @Last Modified by: wade
- * @Last Modified time: 2019-05-18 00:26:36
+ * @Last Modified time: 2019-05-19 07:57:11
  * 
  * 开发文件上传功能
  */
@@ -17,23 +17,15 @@ module.exports = [{
         method: 'POST',
         path: '/upload/img',
         handler: async(request, reply) => {
-            // fs.mkdir(__dirname + '/publice', function(err) {
-            //     if (err) {
-            //         throw err;
-            //     }
-            // const { filename } = request.payload.file.hapi // 获取上传文件
             let filename = Math.random().toString(36).substr(2) + '.' + request.payload.file.hapi.filename.split('.').pop()
-                // console.log(request.payload.file.hapi.filename.split('.').pop())
             console.log(filename)
-                // writeSync 同步版本
-            fs.writeFile(__dirname + `/publice/${filename}`, request.payload.file._data, 'utf8', function(error) {
-                    if (error) {
-                        console.log(error);
-                        return false;
-                    }
-                    reply(`${filename}`);
-                })
-                // })
+            fs.writeFile(__dirname + `/publice/img/${filename}`, request.payload.file._data, 'utf8', function(error) {
+                if (error) {
+                    console.log(error);
+                    return false;
+                }
+                reply(`${filename}`);
+            })
         },
         config: {
             auth: false,
@@ -42,7 +34,7 @@ module.exports = [{
                     payloadType: 'form'
                 }
             },
-            description: '上传静态图片资源至publice文件夹下,限制大小3M',
+            description: '上传静态图片资源至publice文件夹下img,限制大小3M',
             tags: ['api', `${GROUP_NAME}`],
             validate: {
                 payload: {
@@ -61,7 +53,7 @@ module.exports = [{
         path: '/image/{imageTarget}',
         handler: function(request, reply) {
             const { imageTarget: imageName } = request.params;
-            reply.file(__dirname + `/publice/${imageName}`);
+            reply.file(__dirname + `/publice/img/${imageName}`);
         },
         config: {
             auth: false,
