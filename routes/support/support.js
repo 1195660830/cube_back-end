@@ -2,7 +2,7 @@
  * @Author: wade 
  * @Date: 2019-05-17 14:57:25 
  * @Last Modified by: wade
- * @Last Modified time: 2019-05-19 08:09:43
+ * @Last Modified time: 2019-05-19 08:32:30
  * 
  * 开发文件上传功能
  */
@@ -11,7 +11,7 @@
 
 const fs = require('fs')
 const Joi = require('joi')
-const GROUP_NAME = 'upload'
+const GROUP_NAME = 'support'
 
 module.exports = [{
         method: 'POST',
