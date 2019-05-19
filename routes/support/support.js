@@ -2,7 +2,7 @@
  * @Author: wade 
  * @Date: 2019-05-17 14:57:25 
  * @Last Modified by: wade
- * @Last Modified time: 2019-05-19 08:32:30
+ * @Last Modified time: 2019-05-19 22:02:07
  * 
  * 开发文件上传功能
  */
@@ -24,7 +24,7 @@ module.exports = [{
                     console.log(error);
                     return false;
                 }
-                reply(`${filename}`);
+                reply(`http://localhost:8080/image/${filename}`);
             })
         },
         config: {

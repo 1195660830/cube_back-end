@@ -26,6 +26,7 @@ const GROUP_LABEL3 = "weapp_hotVideo";
 const GROUP_LABEL4 = "weapp_applyUser";
 const GROUP_LABEL5 = "weapp_competitionResult";
 const GROUP_LABEL6 = "weapp_ranking";
+const GROUP_LABEL7 = "weapp_common";
 
 
 module.exports = [{
@@ -44,7 +45,9 @@ module.exports = [{
                     "news_url",
                     "is_top",
                     "created_at",
-                    "version"
+                    "version",
+                    "img",
+                    'remark'
                 ],
                 where: {
                     status: 1
@@ -324,6 +327,9 @@ module.exports = [{
                     count: totalCount
                 } = await models.competitionModel.findAndCountAll({
                     attributes: showCol,
+                    where: {
+                        status: 1
+                    },
                     limit: request.query.limit,
                     offset: (request.query.page - 1) * request.query.limit,
                 });
@@ -340,7 +346,8 @@ module.exports = [{
                 } = await models.competitionModel.findAndCountAll({
                     attributes: showCol,
                     where: {
-                        'is_finish': is_finish
+                        'is_finish': is_finish,
+                        status: 1
                     },
                     limit: request.query.limit,
                     offset: (request.query.page - 1) * request.query.limit,
@@ -413,7 +420,8 @@ module.exports = [{
                     "version",
                     "status",
                     "updated_at",
-                    "remark"
+                    "remark",
+                    "create_user"
                 ],
                 limit: request.query.limit,
                 offset: (request.query.page - 1) * request.query.limit,
@@ -547,6 +555,40 @@ module.exports = [{
             auth: false,
             tags: ['api', `${GROUP_LABEL6}`],
             description: '排名',
+            validate: {
+                query: {
+                    ...paginationDefine
+                }
+            }
+        },
+
+    },
+    {
+        method: 'GET',
+        path: `/${GROUP_NAME}/commenInfo`,
+        handler: async(request, reply) => {
+            const {
+                count: news_count
+            } = await models.rankingModel.findAndCountAll({ where: { 'status': 1 } })
+
+            const {
+                count: commetition_count
+            } = await models.competitionModel.findAndCountAll({ where: { 'status': 1 } })
+
+            const {
+                count: video_count
+            } = await models.hotVideoModel.findAndCountAll({ where: { 'status': 1 } })
+
+            reply({
+                'mews_count': news_count,
+                'commetition_count': commetition_count,
+                'video_count': video_count,
+            });
+        },
+        config: {
+            auth: false,
+            tags: ['api', `${GROUP_LABEL7}`],
+            description: '获取首页，赛事，视频，新闻统计信息',
             validate: {
                 query: {
                     ...paginationDefine
