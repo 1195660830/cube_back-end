@@ -241,17 +241,18 @@ module.exports = [{
                 rows: results,
                 count: totalCount
             } = await models.competitionModel.findAndCountAll({
-                attributes: [
-                    'id',
-                    'logo',
-                    'location',
-                    'country',
-                    'name',
-                    'event_province',
-                    'event_date',
-                    'version',
-                    'created_at'
-                ],
+                // attributes: [
+                //     'id',
+                //     'logo',
+                //     'location',
+                //     'country',
+                //     'name',
+                //     'event_province',
+                //     'event_date',
+                //     'version',
+                //     'created_at',
+
+                // ],
                 where: {
                     'status': 1
                 },
