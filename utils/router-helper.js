@@ -18,10 +18,11 @@ const paginationDefine = {
 // 如果有 authorization 就必须要填写 相应token
 const jwtHeaderDefine = {
     headers: Joi.object({
-      authorization: Joi.string().required(),
+        authorization: Joi.string().required(),
     }).unknown(),
-  };
+};
 
 module.exports = {
-    paginationDefine,jwtHeaderDefine
+    paginationDefine,
+    jwtHeaderDefine
 }

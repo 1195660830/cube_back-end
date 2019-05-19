@@ -325,7 +325,15 @@ module.exports = [{
                     name: Joi.string(),
                     event_province: Joi.string(),
                     event_date: Joi.string(),
-                    logo: Joi.string()
+                    logo: Joi.string(),
+                    description: Joi.string(), // 内容描述
+                    is_finish: Joi.string(), // 是否结束
+                    tel: Joi.string(), // 联系电话
+                    applyUser_number: Joi.string(), // 限制报名人数
+                    applyUser_total: Joi.string(), // 已报名人数
+                    QR_logo: Joi.string(), // 客服二维码
+                    version: Joi.string(), // 版本号
+                    status: Joi.string(), // 状态
                 }
             }
         }
@@ -428,8 +436,14 @@ module.exports = [{
                     name: Joi.string(),
                     event_province: Joi.string(),
                     event_date: Joi.string(),
-                    logo: Joi.string()
-
+                    logo: Joi.string(),
+                    description: Joi.string(), // 内容描述
+                    is_finish: Joi.string(), // 是否结束
+                    tel: Joi.string(), // 联系电话
+                    applyUser_number: Joi.string(), // 限制报名人数
+                    applyUser_total: Joi.string(), // 已报名人数
+                    QR_logo: Joi.string(), // 客服二维码
+                    status: Joi.string(), // 状态
 
                 }
             }

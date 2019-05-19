@@ -32,14 +32,9 @@ module.exports = (sequelize, DataTypes) => sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        description: { // 内容描述
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        is_finish: { // 是否结束
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+        description: DataTypes.STRING // 内容描述
+            ,
+        is_finish: DataTypes.STRING, // 是否结束
         tel: DataTypes.STRING, // 联系电话
         applyUser_number: DataTypes.STRING, // 限制报名人数
         applyUser_total: DataTypes.STRING, // 已报名人数
