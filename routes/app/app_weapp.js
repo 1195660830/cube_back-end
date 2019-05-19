@@ -302,35 +302,94 @@ module.exports = [{
         method: 'GET',
         path: `/${GROUP_NAME}/competitions`,
         handler: async(request, reply) => {
-            const {
-                rows: results,
-                count: totalCount
-            } = await models.competitionModel.findAndCountAll({
-                attributes: [
-                    'id',
-                    'location',
-                    'country',
-                    'name',
-                    'event_province',
-                    'event_date',
-                    'version',
-                ],
-                limit: request.query.limit,
-                offset: (request.query.page - 1) * request.query.limit,
-            });
-            // 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
-            reply({
-                results,
-                totalCount
-            });
+            console.log(request)
+            const { is_finish } = request.query;
+            const showCol = [
+                'id',
+                'logo',
+                'location',
+                'country',
+                'name',
+                'event_province',
+                'event_date',
+                'version',
+                'is_finish',
+                'applyUser_total',
+                'applyUser_number',
+            ]
+            if (is_finish == 0 || is_finish == '') {
+                // 0 和 空 全选
+                const {
+                    rows: results,
+                    count: totalCount
+                } = await models.competitionModel.findAndCountAll({
+                    attributes: showCol,
+                    limit: request.query.limit,
+                    offset: (request.query.page - 1) * request.query.limit,
+                });
+
+                // 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+                reply({
+                    results,
+                    totalCount
+                });
+            } else {
+                const {
+                    rows: results,
+                    count: totalCount
+                } = await models.competitionModel.findAndCountAll({
+                    attributes: showCol,
+                    where: {
+                        'is_finish': is_finish
+                    },
+                    limit: request.query.limit,
+                    offset: (request.query.page - 1) * request.query.limit,
+                });
+
+                // 开启分页的插件，返回的数据结构里，需要带上 result 与 totalCount 两个字段
+                reply({
+                    results,
+                    totalCount
+                });
+            }
         },
         config: {
             auth: false,
             tags: ['api', `${GROUP_LABEL2}`, ],
             description: '赛事',
+            notes: '0 和 空 等于 全选',
             validate: {
                 query: {
+                    is_finish: Joi.string().description('0 全部 1 正在报名 2 结束报名'),
                     ...paginationDefine
+
+                }
+            }
+        },
+
+    },
+    {
+        method: 'GET',
+        path: `/${GROUP_NAME}/competitions/{competitionId}`,
+        handler: async(request, reply) => {
+            const { competitionId: id } = request.params
+            models.competitionModel.findAll({
+                where: {
+                    id: id
+                }
+            }).then(results => {
+                reply({
+                    results
+                })
+            })
+        },
+        config: {
+            auth: false,
+            tags: ['api', `${GROUP_LABEL2}`, ],
+            description: '根据比赛id来，获取比赛详情',
+            validate: {
+                params: {
+                    competitionId: Joi.string().required().description('比赛的id'),
                 }
             }
         },
