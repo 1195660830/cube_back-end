@@ -540,7 +540,8 @@ module.exports = [{
                     "apply_award",
                     "best_competition",
                     "version",
-                    "created_at"
+                    "created_at",
+                    "logo"
                 ],
                 limit: request.query.limit,
                 offset: (request.query.page - 1) * request.query.limit,
