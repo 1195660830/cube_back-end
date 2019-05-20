@@ -487,6 +487,7 @@ module.exports = [{
         path: `/${GROUP_NAME}/apply`,
         handler: async(request, reply) => {
             const { competition_id: com_id, user_id: user_id } = request.payload
+
             console.log(com_id, user_id);
 
             models.competitionModel.count({
@@ -504,20 +505,9 @@ module.exports = [{
                             if (results == 1) {
                                 // reply("成功")
                                 models.applyUserModel.upsert({
-                                    // defaults: {
-                                    // competition_id: com_id,
-                                    // username: user_id,
                                     ...request.payload,
-                                    sex: '测试',
                                     competition_id: com_id,
-                                    // username: Joi.string(),
-                                    // sex: Joi.string(),
-                                    // apply_types: Joi.string(),
-                                    // apply_time: Joi.string(),
-                                    // is_pay: Joi.string(),
-                                    // pay_way: Joi.string(),
-                                    // status: Joi.string(),
-                                    // logo: Joi.string(),
+                                    user_id: user_id,
 
                                 }).then(results => {
                                     console.log(results)
@@ -538,11 +528,10 @@ module.exports = [{
         config: {
             auth: false,
             tags: ['api', `${GROUP_LABEL4}`, ],
-            notes: '比赛id和用户id，必须存在。',
+            notes: '比赛id和用户id，必须存在，先判断是否报名？。',
             description: '报名参赛',
             validate: {
                 payload: {
-                    // competitionId: Joi.string().required().description('比赛id'),
                     competition_id: Joi.string().required().description('比赛id'),
                     user_id: Joi.string().required().description('选手id'),
                     username: Joi.string(),
@@ -553,10 +542,52 @@ module.exports = [{
                     pay_way: Joi.string(),
                     status: Joi.string(),
                     logo: Joi.string(),
-                    // info:Joi.string().required().description('选手id'),
                 }
             }
+        }
+
+    },
+    {
+        method: 'GET',
+        path: `/${GROUP_NAME}/is_apply`,
+        handler: async(request, reply) => {
+            const { competition_id: com_id, user_id: user_id } = request.query
+            console.log(com_id, user_id);
+
+            models.applyUserModel.count({
+                    where: {
+                        competition_id: com_id,
+                        user_id: user_id
+                    }
+                })
+                .then(results => {
+                    if (results == 1) {
+                        reply({
+                            code: 202,
+                            message: "已经报名"
+                        })
+                    } else {
+                        reply({
+                            code: 200,
+                            message: "可以报名"
+                        })
+                    }
+                })
+
+
         },
+        config: {
+            auth: false,
+            tags: ['api', `${GROUP_LABEL4}`, ],
+            notes: '先判断是否报名？。 202表示已经报名',
+            description: '报名资格',
+            validate: {
+                query: {
+                    competition_id: Joi.string().required().description('比赛id'),
+                    user_id: Joi.string().required().description('选手id'),
+                }
+            }
+        }
 
     },
     {
