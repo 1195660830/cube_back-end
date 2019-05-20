@@ -473,7 +473,7 @@ module.exports = [{
         config: {
             auth: false,
             tags: ['api', `${GROUP_LABEL4}`],
-            description: '报名参赛选手',
+            description: '报名参赛选手列表',
             validate: {
                 query: {
                     ...paginationDefine
@@ -508,6 +508,9 @@ module.exports = [{
                                     ...request.payload,
                                     competition_id: com_id,
                                     user_id: user_id,
+                                    is_pay: '否',
+                                    version: 1,
+                                    status: 1
 
                                 }).then(results => {
                                     console.log(results)
@@ -573,8 +576,6 @@ module.exports = [{
                         })
                     }
                 })
-
-
         },
         config: {
             auth: false,
@@ -584,6 +585,33 @@ module.exports = [{
             validate: {
                 query: {
                     competition_id: Joi.string().required().description('比赛id'),
+                    user_id: Joi.string().required().description('选手id'),
+                }
+            }
+        }
+
+    },
+    {
+        method: 'GET',
+        path: `/${GROUP_NAME}/my_apply`,
+        handler: async(request, reply) => {
+            const { user_id: user_id } = request.query
+
+            models.applyUserModel.findAndCountAll({
+                    where: {
+                        user_id: user_id
+                    }
+                })
+                .then(results => {
+                    reply(results)
+                })
+        },
+        config: {
+            auth: false,
+            tags: ['api', `${GROUP_LABEL4}`, ],
+            description: '我报名的比赛',
+            validate: {
+                query: {
                     user_id: Joi.string().required().description('选手id'),
                 }
             }

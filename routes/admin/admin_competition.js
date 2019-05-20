@@ -112,7 +112,7 @@ module.exports = [{
             description: "报名比赛",
             validate: {
                 payload: {
-                    competition_id: Joi.string(),
+                    competition_id: Joi.number().integer(),
                     username: Joi.string(),
                     sex: Joi.string(),
                     apply_types: Joi.string(),
