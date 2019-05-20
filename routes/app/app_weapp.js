@@ -71,64 +71,64 @@ module.exports = [{
             }
         }
     },
-    {
-        method: "POST",
-        path: `/${GROUP_NAME}/news`,
-        handler: async(request, reply) => {
-            models.sequelize.transaction(function(t) {
-                // 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
-                request.payload.newsRequest.status = 1
-                request.payload.newsRequest.version = 1
-                return models.newsModels
-                    .findOrCreate({
-                        where: {
-                            'title': request.payload.newsRequest.title
-                        },
-                        defaults: request.payload.newsRequest,
-                        transaction: t
-                    })
-                    .spread((user, created) => {
-                        console.log(
-                            user.get({
-                                plain: true
-                            })
-                        );
-                        if (created) {
+    // {
+    //     method: "POST",
+    //     path: `/${GROUP_NAME}/news`,
+    //     handler: async(request, reply) => {
+    //         models.sequelize.transaction(function(t) {
+    //             // 解决方法 出自 https://stackoverflow.com/questions/43403084/how-to-use-findorcreate-in-sequelize?answertab=votes#tab-top
+    //             request.payload.newsRequest.status = 1
+    //             request.payload.newsRequest.version = 1
+    //             return models.newsModels
+    //                 .findOrCreate({
+    //                     where: {
+    //                         'title': request.payload.newsRequest.title
+    //                     },
+    //                     defaults: request.payload.newsRequest,
+    //                     transaction: t
+    //                 })
+    //                 .spread((user, created) => {
+    //                     console.log(
+    //                         user.get({
+    //                             plain: true
+    //                         })
+    //                     );
+    //                     if (created) {
 
-                            reply({
-                                code: 200,
-                                request: ["succeed"]
-                            });
-                        } else {
-                            reply({
-                                code: 210,
-                                request: ["失败"]
-                            });
-                        }
-                    });
-            });
-        },
-        config: {
-            tags: ["api", `${GROUP_LABEL1}`],
-            auth: false,
-            description: "添加新闻,标题重复则添加失败",
-            validate: {
-                payload: {
-                    newsRequest: Joi.object().keys({
-                        title: Joi.string(),
-                        content: Joi.string(),
-                        create_user: Joi.string(),
-                        img: Joi.string(),
-                        news_url: Joi.string(),
-                        is_top: Joi.number().integer(),
-                        version: Joi.number().integer(),
-                        remark: Joi.string()
-                    }),
+    //                         reply({
+    //                             code: 200,
+    //                             request: ["succeed"]
+    //                         });
+    //                     } else {
+    //                         reply({
+    //                             code: 210,
+    //                             request: ["失败"]
+    //                         });
+    //                     }
+    //                 });
+    //         });
+    //     },
+    //     config: {
+    //         tags: ["api", `${GROUP_LABEL1}`],
+    //         auth: false,
+    //         description: "添加新闻,标题重复则添加失败",
+    //         validate: {
+    //             payload: {
+    //                 newsRequest: Joi.object().keys({
+    //                     title: Joi.string(),
+    //                     content: Joi.string(),
+    //                     create_user: Joi.string(),
+    //                     img: Joi.string(),
+    //                     news_url: Joi.string(),
+    //                     is_top: Joi.number().integer(),
+    //                     version: Joi.number().integer(),
+    //                     remark: Joi.string()
+    //                 }),
 
-                }
-            }
-        }
-    },
+    //             }
+    //         }
+    //     }
+    // },
     {
         method: "GET",
         path: `/${GROUP_NAME}/news/{search}`,
@@ -187,120 +187,120 @@ module.exports = [{
             }
         }
     },
-    {
-        method: "DELETE",
-        path: `/${GROUP_NAME}/news/{id}`,
-        handler: async(request, reply) => {
-            const targetId = request.params.id;
-            const result = await models.newsModels.update({
-                status: 2
-            }, {
-                where: [{
-                        id: targetId
-                    },
-                    {
-                        status: 1
-                    }
-                ]
-            });
-            if (result[0]) {
-                //result = 1
-                reply({
-                    code: 200,
-                    result: result
-                });
-            } else {
-                //result = 0
-                reply({
-                    code: 210,
-                    result: "id错误"
-                });
-            }
-        },
-        config: {
-            tags: ["api", `${GROUP_LABEL1}`],
-            auth: false,
-            description: "删除",
-            validate: {
-                params: {
-                    id: Joi.string().required().description('删除的id'),
-                },
-                ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
-            }
-        }
-    },
-    {
-        method: "PUT",
-        path: `/${GROUP_NAME}/news/{id}`,
-        handler: async(request, reply) => {
+    // {
+    //     method: "DELETE",
+    //     path: `/${GROUP_NAME}/news/{id}`,
+    //     handler: async(request, reply) => {
+    //         const targetId = request.params.id;
+    //         const result = await models.newsModels.update({
+    //             status: 2
+    //         }, {
+    //             where: [{
+    //                     id: targetId
+    //                 },
+    //                 {
+    //                     status: 1
+    //                 }
+    //             ]
+    //         });
+    //         if (result[0]) {
+    //             //result = 1
+    //             reply({
+    //                 code: 200,
+    //                 result: result
+    //             });
+    //         } else {
+    //             //result = 0
+    //             reply({
+    //                 code: 210,
+    //                 result: "id错误"
+    //             });
+    //         }
+    //     },
+    //     config: {
+    //         tags: ["api", `${GROUP_LABEL1}`],
+    //         auth: false,
+    //         description: "删除",
+    //         validate: {
+    //             params: {
+    //                 id: Joi.string().required().description('删除的id'),
+    //             },
+    //             ...jwtHeaderDefine, // 增加需要 jwt auth 认证的接口 header 校验
+    //         }
+    //     }
+    // },
+    // {
+    //     method: "PUT",
+    //     path: `/${GROUP_NAME}/news/{id}`,
+    //     handler: async(request, reply) => {
 
-            // 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
+    //         // 使用乐观锁设计,首先先查一次 version ,相同,再进行 update
 
-            const targetVersion = request.query.version
-            const targetId = request.params.id
+    //         const targetVersion = request.query.version
+    //         const targetId = request.params.id
 
-            request.payload.newsRequest.version = ++request.query.version
+    //         request.payload.newsRequest.version = ++request.query.version
 
-            models.newsModels.findOne({
-                    where: {
-                        [Op.and]: [{
-                                id: targetId
-                            },
-                            {
-                                version: targetVersion
-                            }, {
-                                status: 1
-                            }
-                        ]
-                    }
-                })
-                .then(project => {
-                    if (project) {
-                        project.update({
-                                ...request.payload.newsRequest
-                            })
-                            .then(
-                                function() {
-                                    reply({
-                                        code: 200,
-                                        result: 'success'
-                                    })
-                                }
-                            )
-                    } else {
-                        reply({
-                            code: 210,
-                            result: 'id错误或版本号错误'
-                        })
-                    }
-                })
-        },
-        config: {
-            tags: ["api", `${GROUP_LABEL1}`],
-            auth: false,
-            description: "修改",
-            validate: {
-                params: {
-                    id: Joi.string().required().description('删除的id'),
-                },
-                query: {
-                    version: Joi.string().required().description('删除的version')
-                },
-                payload: {
-                    newsRequest: Joi.object().keys({
-                        title: Joi.string(),
-                        content: Joi.string(),
-                        create_user: Joi.string(),
-                        img: Joi.string(),
-                        news_url: Joi.string(),
-                        is_top: Joi.number().integer(),
-                        remark: Joi.string()
-                    }),
+    //         models.newsModels.findOne({
+    //                 where: {
+    //                     [Op.and]: [{
+    //                             id: targetId
+    //                         },
+    //                         {
+    //                             version: targetVersion
+    //                         }, {
+    //                             status: 1
+    //                         }
+    //                     ]
+    //                 }
+    //             })
+    //             .then(project => {
+    //                 if (project) {
+    //                     project.update({
+    //                             ...request.payload.newsRequest
+    //                         })
+    //                         .then(
+    //                             function() {
+    //                                 reply({
+    //                                     code: 200,
+    //                                     result: 'success'
+    //                                 })
+    //                             }
+    //                         )
+    //                 } else {
+    //                     reply({
+    //                         code: 210,
+    //                         result: 'id错误或版本号错误'
+    //                     })
+    //                 }
+    //             })
+    //     },
+    //     config: {
+    //         tags: ["api", `${GROUP_LABEL1}`],
+    //         auth: false,
+    //         description: "修改",
+    //         validate: {
+    //             params: {
+    //                 id: Joi.string().required().description('删除的id'),
+    //             },
+    //             query: {
+    //                 version: Joi.string().required().description('删除的version')
+    //             },
+    //             payload: {
+    //                 newsRequest: Joi.object().keys({
+    //                     title: Joi.string(),
+    //                     content: Joi.string(),
+    //                     create_user: Joi.string(),
+    //                     img: Joi.string(),
+    //                     news_url: Joi.string(),
+    //                     is_top: Joi.number().integer(),
+    //                     remark: Joi.string()
+    //                 }),
 
-                }
-            }
-        }
-    },
+    //             }
+    //         }
+    //     }
+    // },
     {
         method: 'GET',
         path: `/${GROUP_NAME}/competitions`,
@@ -477,6 +477,83 @@ module.exports = [{
             validate: {
                 query: {
                     ...paginationDefine
+                }
+            }
+        },
+
+    },
+    {
+        method: 'POST',
+        path: `/${GROUP_NAME}/apply`,
+        handler: async(request, reply) => {
+            const { competition_id: com_id, user_id: user_id } = request.payload
+            console.log(com_id, user_id);
+
+            models.competitionModel.count({
+                    where: {
+                        id: com_id
+                    }
+                })
+                .then(results => {
+                    if (results == 1) {
+                        models.users.count({
+                            where: {
+                                id: user_id
+                            }
+                        }).then(results => {
+                            if (results == 1) {
+                                // reply("成功")
+                                models.applyUserModel.upsert({
+                                    // defaults: {
+                                    // competition_id: com_id,
+                                    // username: user_id,
+                                    ...request.payload,
+                                    sex: '测试',
+                                    competition_id: com_id,
+                                    // username: Joi.string(),
+                                    // sex: Joi.string(),
+                                    // apply_types: Joi.string(),
+                                    // apply_time: Joi.string(),
+                                    // is_pay: Joi.string(),
+                                    // pay_way: Joi.string(),
+                                    // status: Joi.string(),
+                                    // logo: Joi.string(),
+
+                                }).then(results => {
+                                    console.log(results)
+                                    reply(results ? '报名成功' : '出错了')
+                                })
+
+                            } else {
+                                reply("用户id，错误")
+                            }
+                        })
+                    } else {
+                        reply("比赛id，错误")
+                    }
+                })
+
+
+        },
+        config: {
+            auth: false,
+            tags: ['api', `${GROUP_LABEL4}`, ],
+            notes: '比赛id和用户id，必须存在。',
+            description: '报名参赛',
+            validate: {
+                payload: {
+                    // competitionId: Joi.string().required().description('比赛id'),
+                    competition_id: Joi.string().required().description('比赛id'),
+                    user_id: Joi.string().required().description('选手id'),
+                    username: Joi.string(),
+                    sex: Joi.string(),
+                    apply_types: Joi.string(),
+                    apply_time: Joi.string(),
+                    is_pay: Joi.string(),
+                    pay_way: Joi.string(),
+                    status: Joi.string(),
+                    logo: Joi.string(),
+                    // info:Joi.string().required().description('选手id'),
                 }
             }
         },
