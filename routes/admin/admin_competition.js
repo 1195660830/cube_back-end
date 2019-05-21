@@ -40,7 +40,8 @@ module.exports = [{
                     "version"
                 ],
                 where: [{
-                    competition_id: id
+                    competition_id: id,
+                    status: 1
                 }],
                 limit: request.query.limit,
                 offset: (request.query.page - 1) * request.query.limit,
@@ -117,7 +118,7 @@ module.exports = [{
                     sex: Joi.string(),
                     apply_types: Joi.string(),
                     apply_time: Joi.string(),
-                    is_pay: Joi.string(),
+                    is_pay: Joi.number(),
                     pay_way: Joi.string(),
                     status: Joi.string(),
                     logo: Joi.string(),
@@ -182,7 +183,7 @@ module.exports = [{
                     sex: Joi.string(),
                     apply_types: Joi.string(),
                     apply_time: Joi.string(),
-                    is_pay: Joi.string(),
+                    is_pay: Joi.number(),
                     pay_way: Joi.string(),
                     status: Joi.string(),
                     logo: Joi.string(),

@@ -508,7 +508,7 @@ module.exports = [{
                                     ...request.payload,
                                     competition_id: com_id,
                                     user_id: user_id,
-                                    is_pay: '否',
+                                    is_pay: 0,
                                     version: 1,
                                     status: 1
 
@@ -541,7 +541,7 @@ module.exports = [{
                     sex: Joi.string(),
                     apply_types: Joi.string(),
                     apply_time: Joi.string(),
-                    is_pay: Joi.string(),
+                    is_pay: Joi.number(),
                     pay_way: Joi.string(),
                     status: Joi.string(),
                     logo: Joi.string(),
@@ -560,7 +560,8 @@ module.exports = [{
             models.applyUserModel.count({
                     where: {
                         competition_id: com_id,
-                        user_id: user_id
+                        user_id: user_id,
+                        status: 1
                     }
                 })
                 .then(results => {
@@ -599,7 +600,8 @@ module.exports = [{
 
             models.applyUserModel.findAndCountAll({
                     where: {
-                        user_id: user_id
+                        user_id: user_id,
+                        status: 1
                     }
                 })
                 .then(results => {
@@ -638,6 +640,9 @@ module.exports = [{
                     "version",
                     "created_at"
                 ],
+                where: {
+                    status: 1
+                },
                 limit: request.query.limit,
                 offset: (request.query.page - 1) * request.query.limit,
             });
@@ -679,6 +684,9 @@ module.exports = [{
                     "created_at",
                     "logo"
                 ],
+                where: {
+                    status: 1
+                },
                 limit: request.query.limit,
                 offset: (request.query.page - 1) * request.query.limit,
             });
