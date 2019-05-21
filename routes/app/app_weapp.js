@@ -682,7 +682,8 @@ module.exports = [{
                     "best_competition",
                     "version",
                     "created_at",
-                    "logo"
+                    "logo",
+                    "remark"
                 ],
                 where: {
                     status: 1
